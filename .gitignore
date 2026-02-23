@@ -5,9 +5,24 @@ build/
 dist/
 wheels/
 *.egg-info
+*.whl
+*.tar.gz
 
 # Virtual environments
 .venv
+
+# Tool caches
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Secrets
+.env
+.env.*
 
 # Git worktrees
 .worktrees/

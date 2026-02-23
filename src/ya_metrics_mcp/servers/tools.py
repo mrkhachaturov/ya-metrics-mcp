@@ -340,3 +340,27 @@ async def get_drilldown(
     """Generate a single branch of a hierarchical tree-view report (drill-down)."""
     fetcher = await get_metrika_fetcher(ctx)
     return await fetcher.get_drilldown(counter_id, dimensions, metrics, parent_id, date_from, date_to, limit)
+
+
+@mcp.tool(tags={"metrika", "read"})
+async def compare_segments(
+    ctx: Context,
+    counter_id: Annotated[str, Field(description="Yandex Metrika counter ID")],
+    metrics: Annotated[list[str], Field(description="Metrics to compare, e.g. ['ym:s:visits', 'ym:s:users']")],
+    dimensions: Annotated[str, Field(description="Dimension to group by, e.g. 'ym:s:trafficSource'")],
+    segment_a_name: Annotated[str, Field(description="Human-readable name for segment A, e.g. 'Organic'")],
+    segment_a_filter: Annotated[str, Field(description="Filter expression for segment A, e.g. \"ym:s:trafficSource=='organic'\"")],
+    segment_b_name: Annotated[str, Field(description="Human-readable name for segment B, e.g. 'Direct'")],
+    segment_b_filter: Annotated[str, Field(description="Filter expression for segment B, e.g. \"ym:s:trafficSource=='direct'\"")],
+    date_from: Annotated[str | None, Field(description="Start date YYYY-MM-DD")] = None,
+    date_to: Annotated[str | None, Field(description="End date YYYY-MM-DD")] = None,
+    limit: Annotated[int | None, Field(description="Maximum rows to return")] = None,
+) -> str:
+    """Compare two user segments side by side in a table report."""
+    fetcher = await get_metrika_fetcher(ctx)
+    return await fetcher.compare_segments(
+        counter_id, metrics, dimensions,
+        segment_a_name, segment_a_filter,
+        segment_b_name, segment_b_filter,
+        date_from, date_to, limit,
+    )

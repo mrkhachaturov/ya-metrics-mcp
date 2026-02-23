@@ -104,6 +104,49 @@ class AdvancedMixin:
         return self.format_response(data)
 
     @handle_api_errors()
+    async def compare_segments(
+        self,
+        counter_id: str,
+        metrics: list[str],
+        dimensions: str,
+        segment_a_name: str,
+        segment_a_filter: str,
+        segment_b_name: str,
+        segment_b_filter: str,
+        date_from: str | None = None,
+        date_to: str | None = None,
+        limit: int | None = None,
+    ) -> str:
+        import json as _json
+
+        segment = _json.dumps([
+            {"type": "group", "logic": "AND", "groups": [
+                {"type": "segment", "segment_id": "0"},
+            ]},
+            {"type": "group", "logic": "AND", "groups": [
+                {"type": "segment", "segment_id": "1"},
+            ]},
+        ])
+        segment_definitions = _json.dumps({
+            "0": {"type": "filter", "data": {"filter": segment_a_filter, "name": segment_a_name}},
+            "1": {"type": "filter", "data": {"filter": segment_b_filter, "name": segment_b_name}},
+        })
+        data = await self.client.get(
+            "/stat/v1/data/comparison",
+            {
+                "id": counter_id,
+                "metrics": ",".join(metrics),
+                "dimensions": dimensions,
+                "segment": segment,
+                "segment_definitions": segment_definitions,
+                "date1": validate_date(date_from),
+                "date2": validate_date(date_to),
+                "limit": limit,
+            },
+        )
+        return self.format_response(data)
+
+    @handle_api_errors()
     async def get_browsers_report(self, counter_id: str) -> str:
         data = await self.client.get(
             "/stat/v1/data",

@@ -21,6 +21,16 @@ async def list_counters(
 
 
 @mcp.tool(tags={"metrika", "read"})
+async def list_goals(
+    ctx: Context,
+    counter_id: Annotated[str, Field(description="Yandex Metrika counter ID")],
+) -> str:
+    """List all conversion goals configured for a counter. Use goal IDs with get_goals_conversion."""
+    fetcher = await get_metrika_fetcher(ctx)
+    return await fetcher.list_goals(counter_id)
+
+
+@mcp.tool(tags={"metrika", "read"})
 async def get_account_info(
     ctx: Context,
     counter_id: Annotated[str, Field(description="Yandex Metrika counter ID")],

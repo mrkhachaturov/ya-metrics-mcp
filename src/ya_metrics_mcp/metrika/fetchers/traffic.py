@@ -90,6 +90,14 @@ class TrafficMixin:
         return self.format_response(data)
 
     @handle_api_errors()
+    async def list_goals(self, counter_id: str) -> str:
+        data = await self.client.get(
+            f"/management/v1/counter/{counter_id}/goals",
+            {},
+        )
+        return self.format_response(data)
+
+    @handle_api_errors()
     async def list_counters(
         self,
         search: str | None = None,

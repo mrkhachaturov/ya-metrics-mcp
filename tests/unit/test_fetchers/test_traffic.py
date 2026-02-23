@@ -68,3 +68,19 @@ async def test_list_counters_with_filter(httpx_mock, fetcher):
     )
     result = await fetcher.list_counters(search="My Website")
     assert isinstance(result, str)
+
+
+@pytest.mark.asyncio
+async def test_list_goals(httpx_mock, fetcher):
+    httpx_mock.add_response(
+        url="https://api-metrika.yandex.net/management/v1/counter/12345/goals",
+        json={
+            "goals": [
+                {"id": 1001, "name": "Purchase", "type": "action"},
+                {"id": 1002, "name": "Sign Up", "type": "form"},
+            ]
+        },
+    )
+    result = await fetcher.list_goals("12345")
+    assert "1001" in result or "Purchase" in result
+    assert isinstance(result, str)

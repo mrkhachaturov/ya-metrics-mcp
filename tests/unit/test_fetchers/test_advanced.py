@@ -23,6 +23,30 @@ async def test_get_browsers_report(httpx_mock, fetcher):
 
 
 @pytest.mark.asyncio
+async def test_compare_segments_drilldown(httpx_mock, fetcher):
+    httpx_mock.add_response(
+        url=re.compile(r".*stat/v1/data/comparison/drilldown.*"),
+        json={
+            "data": [
+                {"dimensions": [{"name": "ym:s:region", "value": "Moscow"}], "metrics": ["6000", "3000"]},
+            ]
+        },
+    )
+    result = await fetcher.compare_segments_drilldown(
+        counter_id="12345",
+        metrics=["ym:s:visits", "ym:s:users"],
+        dimensions="ym:s:regionCountry,ym:s:regionCity",
+        segment_a_name="Organic",
+        segment_a_filter="ym:s:trafficSource=='organic'",
+        segment_b_name="Direct",
+        segment_b_filter="ym:s:trafficSource=='direct'",
+        parent_id="225",
+    )
+    assert "Moscow" in result
+    assert isinstance(result, str)
+
+
+@pytest.mark.asyncio
 async def test_get_drilldown(httpx_mock, fetcher):
     httpx_mock.add_response(
         url=re.compile(r".*stat/v1/data/drilldown.*"),

@@ -364,3 +364,28 @@ async def compare_segments(
         segment_b_name, segment_b_filter,
         date_from, date_to, limit,
     )
+
+
+@mcp.tool(tags={"metrika", "read"})
+async def compare_segments_drilldown(
+    ctx: Context,
+    counter_id: Annotated[str, Field(description="Yandex Metrika counter ID")],
+    metrics: Annotated[list[str], Field(description="Metrics to compare, e.g. ['ym:s:visits', 'ym:s:users']")],
+    dimensions: Annotated[str, Field(description="Comma-separated dimension path, e.g. 'ym:s:regionCountry,ym:s:regionCity'")],
+    segment_a_name: Annotated[str, Field(description="Human-readable name for segment A")],
+    segment_a_filter: Annotated[str, Field(description="Filter expression for segment A")],
+    segment_b_name: Annotated[str, Field(description="Human-readable name for segment B")],
+    segment_b_filter: Annotated[str, Field(description="Filter expression for segment B")],
+    parent_id: Annotated[str | None, Field(description="Parent node ID to drill into (omit for root level)")] = None,
+    date_from: Annotated[str | None, Field(description="Start date YYYY-MM-DD")] = None,
+    date_to: Annotated[str | None, Field(description="End date YYYY-MM-DD")] = None,
+    limit: Annotated[int | None, Field(description="Maximum rows to return")] = None,
+) -> str:
+    """Compare two segments in a hierarchical tree-view report with drill-down capability."""
+    fetcher = await get_metrika_fetcher(ctx)
+    return await fetcher.compare_segments_drilldown(
+        counter_id, metrics, dimensions,
+        segment_a_name, segment_a_filter,
+        segment_b_name, segment_b_filter,
+        parent_id, date_from, date_to, limit,
+    )

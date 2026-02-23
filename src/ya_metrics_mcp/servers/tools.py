@@ -324,3 +324,19 @@ async def get_browsers_report(
     """Get browsers report without accounting for browser version."""
     fetcher = await get_metrika_fetcher(ctx)
     return await fetcher.get_browsers_report(counter_id)
+
+
+@mcp.tool(tags={"metrika", "read"})
+async def get_drilldown(
+    ctx: Context,
+    counter_id: Annotated[str, Field(description="Yandex Metrika counter ID")],
+    dimensions: Annotated[str, Field(description="Comma-separated dimension path for drill-down, e.g. 'ym:s:regionCountry,ym:s:regionCity'")],
+    metrics: Annotated[list[str], Field(description="Metric names, e.g. ['ym:s:visits', 'ym:s:users']")],
+    parent_id: Annotated[str | None, Field(description="Parent node ID to drill into (omit for root level)")] = None,
+    date_from: Annotated[str | None, Field(description="Start date YYYY-MM-DD")] = None,
+    date_to: Annotated[str | None, Field(description="End date YYYY-MM-DD")] = None,
+    limit: Annotated[int | None, Field(description="Maximum rows to return")] = None,
+) -> str:
+    """Generate a single branch of a hierarchical tree-view report (drill-down)."""
+    fetcher = await get_metrika_fetcher(ctx)
+    return await fetcher.get_drilldown(counter_id, dimensions, metrics, parent_id, date_from, date_to, limit)

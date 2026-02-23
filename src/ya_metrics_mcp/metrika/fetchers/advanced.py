@@ -79,6 +79,31 @@ class AdvancedMixin:
         return self.format_response(data)
 
     @handle_api_errors()
+    async def get_drilldown(
+        self,
+        counter_id: str,
+        dimensions: str,
+        metrics: list[str],
+        parent_id: str | None = None,
+        date_from: str | None = None,
+        date_to: str | None = None,
+        limit: int | None = None,
+    ) -> str:
+        data = await self.client.get(
+            "/stat/v1/data/drilldown",
+            {
+                "id": counter_id,
+                "dimensions": dimensions,
+                "metrics": ",".join(metrics),
+                "parent_id": parent_id,
+                "date1": validate_date(date_from),
+                "date2": validate_date(date_to),
+                "limit": limit,
+            },
+        )
+        return self.format_response(data)
+
+    @handle_api_errors()
     async def get_browsers_report(self, counter_id: str) -> str:
         data = await self.client.get(
             "/stat/v1/data",

@@ -90,6 +90,21 @@ class TrafficMixin:
         return self.format_response(data)
 
     @handle_api_errors()
+    async def list_counters(
+        self,
+        search: str | None = None,
+        per_page: int = 100,
+    ) -> str:
+        data = await self.client.get(
+            "/management/v1/counters",
+            {
+                "per_page": per_page,
+                "search": search,
+            },
+        )
+        return self.format_response(data)
+
+    @handle_api_errors()
     async def get_new_users_by_source(
         self,
         counter_id: str,

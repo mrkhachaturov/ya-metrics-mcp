@@ -10,6 +10,17 @@ from ya_metrics_mcp.servers.main import mcp
 # ─── Account & Basic Analytics ───────────────────────────────────────────────
 
 @mcp.tool(tags={"metrika", "read"})
+async def list_counters(
+    ctx: Context,
+    search: Annotated[str | None, Field(description="Filter counters by name or site URL")] = None,
+    per_page: Annotated[int, Field(description="Max counters to return (default 100)", ge=1, le=1000)] = 100,
+) -> str:
+    """List all Yandex Metrika counters available to this account. Use this to find counter IDs."""
+    fetcher = await get_metrika_fetcher(ctx)
+    return await fetcher.list_counters(search, per_page)
+
+
+@mcp.tool(tags={"metrika", "read"})
 async def get_account_info(
     ctx: Context,
     counter_id: Annotated[str, Field(description="Yandex Metrika counter ID")],

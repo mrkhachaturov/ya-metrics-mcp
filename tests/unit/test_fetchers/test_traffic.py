@@ -42,3 +42,29 @@ async def test_get_visits_raises_on_invalid_date(fetcher):
     from ya_metrics_mcp.exceptions import MCPYaMetrikaError
     with pytest.raises((ValueError, MCPYaMetrikaError)):
         await fetcher.get_visits("12345", date_from="not-a-date")
+
+
+@pytest.mark.asyncio
+async def test_list_counters(httpx_mock, fetcher):
+    httpx_mock.add_response(
+        url=re.compile(r".*management/v1/counters.*"),
+        json={
+            "counters": [
+                {"id": 12345, "name": "My Website", "site": "example.com"},
+                {"id": 67890, "name": "My Blog", "site": "blog.example.com"},
+            ]
+        },
+    )
+    result = await fetcher.list_counters()
+    assert "12345" in result or "My Website" in result
+    assert isinstance(result, str)
+
+
+@pytest.mark.asyncio
+async def test_list_counters_with_filter(httpx_mock, fetcher):
+    httpx_mock.add_response(
+        url=re.compile(r".*management/v1/counters.*"),
+        json={"counters": [{"id": 12345, "name": "My Website"}]},
+    )
+    result = await fetcher.list_counters(search="My Website")
+    assert isinstance(result, str)

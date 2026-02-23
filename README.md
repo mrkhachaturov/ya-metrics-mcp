@@ -6,11 +6,30 @@
 
 Model Context Protocol (MCP) server for [Yandex Metrika](https://metrika.yandex.ru/) analytics. Exposes 31 analytics tools to your AI assistant — traffic, content, demographics, geographic, conversion, e-commerce data, and hierarchical drill-down reports.
 
+Documentation in Russian is available [here](README_ru.md) / Документация на русском языке — [здесь](README_ru.md).
+
 ## Quick Start
 
 ### 1. Get Your OAuth Token
 
-Go to [oauth.yandex.ru/client/new](https://oauth.yandex.ru/client/new) and create an app with **Yandex.Metrika** read access. Copy the token.
+1. Go to [oauth.yandex.ru/client/new](https://oauth.yandex.ru/client/new) and create a new application:
+   - **Name** — any name you like
+   - **Platforms** — select **Web services**
+   - **Redirect URI** — enter `https://oauth.yandex.ru/verification_code`
+   - **Data access** — add `metrika:read` (required); optionally add other scopes:
+     - `metrika:write` — create/edit counters
+     - `metrika:expenses` — upload ad expenses
+     - `metrika:user_params` — upload user parameters
+     - `metrika:offline_data` — upload offline conversions
+
+2. Click **Create application** and copy the **ClientID**.
+
+3. Open this URL in your browser (replace `<ClientID>` with your value):
+   ```
+   https://oauth.yandex.ru/authorize?response_type=token&client_id=<ClientID>
+   ```
+
+4. Authorize and copy the token from the resulting page.
 
 ### 2. Configure Your IDE
 

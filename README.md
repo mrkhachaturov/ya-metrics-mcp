@@ -16,11 +16,7 @@ Documentation in Russian is available [here](README_ru.md) / Документа�
    - **Name** — any name you like
    - **Platforms** — select **Web services**
    - **Redirect URI** — enter `https://oauth.yandex.ru/verification_code`
-   - **Data access** — add `metrika:read` (required); optionally add other scopes:
-     - `metrika:write` — create/edit counters
-     - `metrika:expenses` — upload ad expenses
-     - `metrika:user_params` — upload user parameters
-     - `metrika:offline_data` — upload offline conversions
+   - **Data access** — add `metrika:read` (this is the only scope needed for all 31 tools)
 
 2. Click **Create application** and copy the **ClientID**.
 

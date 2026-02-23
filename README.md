@@ -50,7 +50,6 @@ Ask your AI assistant to:
 - **"Show me visits for counter 12345678 over the last 30 days"**
 - **"What are the top traffic sources for my site?"**
 - **"Compare mobile vs desktop users this month"**
-- **"Which articles get the most views?"**
 - **"Show conversion rates for goals 1 and 2"**
 - **"Drill down into traffic by country → city"**
 - **"Compare organic vs direct traffic segments"**
@@ -63,20 +62,22 @@ Ask your AI assistant to:
 | Tool | Description |
 |------|-------------|
 | `list_counters` | List all counters on the account (use this first to find counter IDs) |
-| `list_goals` | List conversion goals for a counter (use with `get_goals_conversion`) |
-| `get_account_info` | Counter metadata and configuration |
+| `list_goals` | List conversion goals for a counter (call before `get_goals_conversion`) |
+| `get_account_info` | Counter metadata: name, site, timezone, permissions |
 
 ### Traffic & Sources
 | Tool | Description |
 |------|-------------|
-| `get_visits` | Visit statistics with date range |
+| `get_visits` | Visit statistics with date range (defaults to 7 days) |
 | `sources_summary` | Traffic sources overview |
 | `sources_search_phrases` | Top search phrases |
 | `get_traffic_sources_types` | Breakdown by source type (organic, direct, referral) |
 | `get_search_engines_data` | Sessions by search engine, with robot/new-user filters |
-| `get_new_users_by_source` | New user acquisition by traffic source |
+| `get_new_users_by_source` | New user acquisition by traffic source (defaults to 30 days) |
 
 ### Content Analytics
+> Requires Yandex Zen/Turbo publisher integration on the counter.
+
 | Tool | Description |
 |------|-------------|
 | `get_content_analytics_sources` | Sources driving readers to articles |
@@ -96,27 +97,31 @@ Ask your AI assistant to:
 ### Geographic
 | Tool | Description |
 |------|-------------|
-| `get_regional_data` | Traffic by city |
+| `get_regional_data` | Traffic by city (all cities by default, or filter by name) |
 | `get_geographical_organic_traffic` | Organic traffic by country and city |
 
 ### Performance & Conversion
 | Tool | Description |
 |------|-------------|
-| `get_page_performance` | Bounce rate and duration by URL |
+| `get_page_performance` | Bounce rate and duration by entry URL path |
 | `get_goals_conversion` | Conversion rates for specified goals |
 | `get_organic_search_performance` | SEO performance by query and engine |
-| `get_conversion_rate_by_source_and_landing` | Conversion by source × landing page |
+| `get_conversion_rate_by_source_and_landing` | Conversion by source × landing page URL |
 
 ### Advanced & Drill-Down
 | Tool | Description |
 |------|-------------|
-| `get_ecommerce_performance` | E-commerce revenue by category and region |
+| `get_ecommerce_performance` | E-commerce purchases by product name (requires e-commerce tracking) |
 | `get_data_by_time` | Time-series data with custom grouping |
 | `get_yandex_direct_experiment` | A/B experiment bounce rates |
 | `get_browsers_report` | Browser usage report |
 | `get_drilldown` | Single branch of a hierarchical tree-view report |
 | `compare_segments` | Compare two user segments side by side |
 | `compare_segments_drilldown` | Segment comparison as a hierarchical tree-view |
+
+### Response Size Control
+
+Many tools accept a `limit` parameter to cap the number of rows returned. This is useful when working with AI assistants to keep responses within context limits. Tools with `limit` support: `sources_summary`, `sources_search_phrases`, `get_device_analysis`, `get_page_performance`, `get_organic_search_performance`, `get_conversion_rate_by_source_and_landing`, `get_regional_data`, `get_geographical_organic_traffic`, `get_drilldown`, `compare_segments`, `compare_segments_drilldown`.
 
 ## Configuration
 
@@ -151,7 +156,7 @@ ya-metrics-mcp --env-file /path/to/.env
 
 ## Installation
 
-**From PyPI** (once published):
+**From PyPI:**
 ```bash
 uvx ya-metrics-mcp
 ```

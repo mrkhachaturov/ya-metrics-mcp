@@ -1,6 +1,6 @@
 # ya-metrics-mcp
 
-MCP server for Yandex Metrika analytics. FastMCP server with mixin-based domain fetchers exposing 25 tools via stdio/HTTP transports.
+MCP server for Yandex Metrika analytics. FastMCP server with mixin-based domain fetchers exposing 31 tools via stdio/HTTP transports.
 
 ## Commands
 
@@ -41,18 +41,18 @@ src/ya_metrics_mcp/
 │   ├── client.py            # YaMetrikaClient — async httpx with retry
 │   └── fetchers/
 │       ├── base.py          # BaseFetcher: holds client, format_response()
-│       ├── traffic.py       # TrafficMixin (7 methods)
+│       ├── traffic.py       # TrafficMixin (9 methods: +list_counters, +list_goals)
 │       ├── content.py       # ContentMixin (5 methods)
 │       ├── demographics.py  # DemographicsMixin (4 methods)
 │       ├── geographic.py    # GeographicMixin (2 methods)
 │       ├── performance.py   # PerformanceMixin (4 methods)
-│       ├── advanced.py      # AdvancedMixin (4 methods)
+│       ├── advanced.py      # AdvancedMixin (7 methods: +get_drilldown, +compare_segments, +compare_segments_drilldown)
 │       └── fetcher.py       # YaMetrikaFetcher — all mixins combined
 ├── servers/
 │   ├── main.py              # FastMCP instance + main_lifespan()
 │   ├── context.py           # MainAppContext dataclass
 │   ├── dependencies.py      # get_metrika_fetcher(ctx) DI helper
-│   └── tools.py             # @mcp.tool() registrations (all 25 tools)
+│   └── tools.py             # @mcp.tool() registrations (all 31 tools)
 └── utils/
     ├── date.py              # validate_date(), default_date_range()
     ├── decorators.py        # @handle_api_errors() — wraps exceptions

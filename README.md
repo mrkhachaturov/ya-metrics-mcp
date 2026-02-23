@@ -4,7 +4,7 @@
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![FastMCP](https://img.shields.io/badge/FastMCP-2.13%2B-green)
 
-Model Context Protocol (MCP) server for [Yandex Metrika](https://metrika.yandex.ru/) analytics. Exposes 25 analytics tools to your AI assistant — traffic, content, demographics, geographic, conversion, and e-commerce data.
+Model Context Protocol (MCP) server for [Yandex Metrika](https://metrika.yandex.ru/) analytics. Exposes 31 analytics tools to your AI assistant — traffic, content, demographics, geographic, conversion, e-commerce data, and hierarchical drill-down reports.
 
 ## Quick Start
 
@@ -46,20 +46,29 @@ Add to your Claude Desktop / Cursor MCP configuration:
 ### 3. Start Using
 
 Ask your AI assistant to:
+- **"List my Metrika counters"** — start here to find your counter ID
 - **"Show me visits for counter 12345678 over the last 30 days"**
 - **"What are the top traffic sources for my site?"**
 - **"Compare mobile vs desktop users this month"**
 - **"Which articles get the most views?"**
 - **"Show conversion rates for goals 1 and 2"**
+- **"Drill down into traffic by country → city"**
+- **"Compare organic vs direct traffic segments"**
 
 ## Tools
 
-25 tools across 6 domains:
+31 tools across 7 domains:
+
+### Account & Counters
+| Tool | Description |
+|------|-------------|
+| `list_counters` | List all counters on the account (use this first to find counter IDs) |
+| `list_goals` | List conversion goals for a counter (use with `get_goals_conversion`) |
+| `get_account_info` | Counter metadata and configuration |
 
 ### Traffic & Sources
 | Tool | Description |
 |------|-------------|
-| `get_account_info` | Counter metadata and configuration |
 | `get_visits` | Visit statistics with date range |
 | `sources_summary` | Traffic sources overview |
 | `sources_search_phrases` | Top search phrases |
@@ -98,13 +107,16 @@ Ask your AI assistant to:
 | `get_organic_search_performance` | SEO performance by query and engine |
 | `get_conversion_rate_by_source_and_landing` | Conversion by source × landing page |
 
-### Advanced
+### Advanced & Drill-Down
 | Tool | Description |
 |------|-------------|
 | `get_ecommerce_performance` | E-commerce revenue by category and region |
 | `get_data_by_time` | Time-series data with custom grouping |
 | `get_yandex_direct_experiment` | A/B experiment bounce rates |
 | `get_browsers_report` | Browser usage report |
+| `get_drilldown` | Single branch of a hierarchical tree-view report |
+| `compare_segments` | Compare two user segments side by side |
+| `compare_segments_drilldown` | Segment comparison as a hierarchical tree-view |
 
 ## Configuration
 

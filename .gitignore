@@ -11,3 +11,6 @@ wheels/
 
 # Git worktrees
 .worktrees/
+
+# Internal planning docs
+docs/
